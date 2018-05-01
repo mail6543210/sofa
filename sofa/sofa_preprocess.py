@@ -85,7 +85,7 @@ def net_trace_read(packet, t_offset):
     if packet.split()[1] != 'IP':
         return []
     payload = int(packet.split()[6])
-    duration = float(old_div(payload, 125.0e6))
+    duration = float(payload / 125.0e6)
     bandwidth = 125.0e6
     pkt_src = 0
     pkt_dst = 0
@@ -199,8 +199,8 @@ def gpu_trace_read(
 
 
 def gpu_kernel_trace_read(record, pid, t_base, t_glb_base):
-    t_begin = old_div((record[0] - t_base), 1e9) + t_glb_base
-    t_end = old_div((record[1] - t_base), 1e9) + t_glb_base
+    t_begin = (record[0] - t_base) / 1e9 + t_glb_base
+    t_end = (record[1] - t_base) / 1e9 + t_glb_base
     kernel_name = "%s" % (
         gpu_symbol_table.loc[gpu_symbol_table._id_ == record[2], 'value'])
     kernel_name = kernel_name[:-30]
@@ -221,8 +221,8 @@ def gpu_kernel_trace_read(record, pid, t_base, t_glb_base):
 
 
 def gpu_memcpy_trace_read(record, t_base, t_glb_base):
-    t_begin = old_div((record[0] - t_base), 1e9) + t_glb_base
-    t_end = old_div((record[1] - t_base), 1e9) + t_glb_base
+    t_begin = (record[0] - t_base) / 1e9 + t_glb_base
+    t_end = (record[1] - t_base) / 1e9 + t_glb_base
 
     src = -1
     dst = -1
@@ -253,8 +253,8 @@ def gpu_memcpy_trace_read(record, t_base, t_glb_base):
 
 
 def gpu_memcpy2_trace_read(record, t_base, t_glb_base):
-    t_begin = old_div((record[0] - t_base), 1e9) + t_glb_base
-    t_end = old_div((record[1] - t_base), 1e9) + t_glb_base
+    t_begin = (record[0] - t_base) / 1e9 + t_glb_base
+    t_end = (record[1] - t_base) / 1e9 + t_glb_base
     trace = [	t_begin,
               record[2],
               float(t_end - t_begin),
