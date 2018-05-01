@@ -84,16 +84,16 @@ def comm_profile(logdir, cfg, df_gpu):
     for key, item in grouped_df:
         print(
             "[%s]: %lf" %
-            (cktable[key], old_div(grouped_df.get_group(key).sum(), 1000000.0)))
+            (cktable[key], grouped_df.get_group(key).sum() / 1000000.0))
         if int(key) == 1:
-            total_h2d_traffic = old_div(grouped_df.get_group(key).sum(), 1000000.0)
+            total_h2d_traffic = grouped_df.get_group(key).sum() / 1000000.0
         if int(key) == 2:
-            total_d2h_traffic = old_div(grouped_df.get_group(key).sum(), 1000000.0)
+            total_d2h_traffic = grouped_df.get_group(key).sum() / 1000000.0
         if int(key) == 10:
-            total_p2p_traffic = old_div(grouped_df.get_group(key).sum(), 1000000.0)
+            total_p2p_traffic = grouped_df.get_group(key).sum() / 1000000.0
         if int(key) != 8:
             total_traffic = total_traffic + \
-                old_div(grouped_df.get_group(key).sum(), 1000000.0)
+                grouped_df.get_group(key).sum() / 1000000.0
     print("Total traffic: %.2lf" % total_traffic)
 
     print_title("Data Communication Time for each CopyKind (s)")
@@ -237,7 +237,7 @@ def gpu_profile(logdir, cfg, df_gpu):
     print_title("Data Traffic (bidirection) for each Device (MB)")
     grouped_df = df_gpu.groupby("deviceId")["payload"]
     for key, item in grouped_df:
-        print("[%d]: %lf" % (key, old_div(grouped_df.get_group(key).sum(), 1000000.0)))
+        print("[%d]: %lf" % (key, grouped_df.get_group(key).sum() / 1000000.0))
 
     grouped_df = df_gpu.groupby("copyKind")["duration"]
     for key, item in grouped_df:
