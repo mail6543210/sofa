@@ -433,6 +433,8 @@ def sofa_preprocess(logdir, cfg):
                     t_offset=t_glb_base -
                     t_base),
                 samples)
+            pool.close()
+            pool.join()
             cpu_traces = pd.DataFrame(res)
             cpu_traces.columns = sofa_fieldnames
             cpu_traces.to_csv(
@@ -781,6 +783,8 @@ def sofa_preprocess(logdir, cfg):
                     t_offset=t_glb_net_base -
                     t_base),
                 packets)
+            pool.close()
+            pool.join()
             res_viz = list_downsample(res, cfg.plot_ratio)
             net_traces = pd.DataFrame(res_viz)
             net_traces.columns = sofa_fieldnames
@@ -870,6 +874,8 @@ def sofa_preprocess(logdir, cfg):
                         t_offset=t_glb_gpu_base -
                         t_base),
                     records)
+                pool.close()
+                pool.join()
                 gpu_traces = pd.DataFrame(res)
                 gpu_traces.columns = sofa_fieldnames
                 gpu_traces.to_csv(
