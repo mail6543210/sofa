@@ -64,7 +64,7 @@ def cpu_trace_read(sample, t_offset):
     t_end = time + t_offset
     trace = [t_begin,
              event,  # % 1000000
-             old_div(cycles, 1e9),
+             cycles / 1e9,
              -1,
              -1,
              0,
@@ -121,8 +121,8 @@ def gpu_trace_read(
     values = record.replace('"', '').split(',')
     kernel_name = values[indices.index('Name')]
     # print("kernel name = %s" % kernel_name)
-    time = old_div(float(values[indices.index('Start')]), ts_rescale) + t_offset
-    duration = old_div(float(values[indices.index('Duration')]), dt_rescale)
+    time = float(values[indices.index('Start')]) / ts_rescale + t_offset
+    duration = float(values[indices.index('Duration')]) / dt_rescale
     t_begin = time
     t_end = time + duration
     try:

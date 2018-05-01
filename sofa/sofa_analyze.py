@@ -283,7 +283,7 @@ def cpu_profile(logdir, cfg, df):
             print("[%d]: %lf" % (key, grouped_df.get_group(key).sum()))
         total_exec_time = total_exec_time + grouped_df.get_group(key).sum()
     n_devices = len(grouped_df)
-    avg_exec_time = old_div(total_exec_time, n_devices)
+    avg_exec_time = total_exec_time / n_devices
     print("total execution time = %.3lf" % total_exec_time)
     print("average execution time across devices = %.3lf" % avg_exec_time)
 
