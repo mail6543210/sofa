@@ -191,7 +191,7 @@ def comm_profile(logdir, cfg, df_gpu):
         else:
             row_str = "GPU%d\t" % i
         for j in range(accum.shape[1]):
-            row_str = row_str + "%d" % (old_div(accum[i][j], (1024 * 1024))) + "\t"
+            row_str = row_str + "%d" % (accum[i][j] / (1024 * 1024)) + "\t"
         print(row_str)
 
     print("Traffic Time Matrix (s):")
@@ -231,7 +231,7 @@ def gpu_profile(logdir, cfg, df_gpu):
         print("[%d]: %lf" % (int(float(key)), grouped_df.get_group(key).sum()))
         total_tasktime = total_tasktime + grouped_df.get_group(key).sum()
     n_devices = len(grouped_df)
-    per_gpu_time = old_div(total_tasktime, n_devices)
+    per_gpu_time = total_tasktime / n_devices
     print("Averaged GPU time of devices: %.2lf" % per_gpu_time)
 
     print_title("Data Traffic (bidirection) for each Device (MB)")
