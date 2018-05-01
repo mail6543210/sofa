@@ -109,7 +109,7 @@ def comm_profile(logdir, cfg, df_gpu):
 
     total_weights = 0
     for i in range(len(bw)):
-        key = bw.keys()[i]
+        key = list(bw.keys())[i]
         if cktable[key] == 'D2D':
             continue
         if cktable[key] == 'H2D':
