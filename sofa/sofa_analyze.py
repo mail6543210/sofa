@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from __future__ import print_function
 import os
 import sys
@@ -10,8 +11,8 @@ from operator import itemgetter, attrgetter
 import argparse
 import multiprocessing as mp
 from functools import partial
-from sofa_print import *
-from sofa_config import *
+from .sofa_print import *
+from .sofa_config import *
 import networkx as nx
 import re 
 

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from __future__ import print_function
 import numpy as np
 import csv
@@ -8,12 +9,12 @@ import multiprocessing as mp
 import glob
 import os
 from functools import partial
-from sofa_config import *
-from sofa_print import *
-from sofa_record import *
-from sofa_preprocess import *
-from sofa_analyze import *
-from sofa_viz import *
+from .sofa_config import *
+from .sofa_print import *
+from .sofa_record import *
+from .sofa_preprocess import *
+from .sofa_analyze import *
+from .sofa_viz import *
 
 
 def main():

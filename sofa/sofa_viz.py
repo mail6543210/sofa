@@ -1,8 +1,9 @@
+from __future__ import absolute_import
 import os
 import sys
 from functools import partial
-from sofa_print import *
-from sofa_config import *
+from .sofa_print import *
+from .sofa_config import *
 import subprocess
 
 

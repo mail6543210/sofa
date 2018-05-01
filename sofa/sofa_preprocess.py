@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from __future__ import print_function
 import pandas as pd
 import numpy as np
@@ -11,8 +12,8 @@ import os
 from functools import partial
 import subprocess
 import re
-from sofa_config import *
-from sofa_print import *
+from .sofa_config import *
+from .sofa_print import *
 
 
 def list_downsample(list_in, plot_ratio):

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from __future__ import print_function
 import numpy as np
 import csv
@@ -8,7 +9,7 @@ import multiprocessing as mp
 import glob
 import os
 from functools import partial
-from sofa_print import *
+from .sofa_print import *
 import subprocess
 from time import sleep
 
