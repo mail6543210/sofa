@@ -1,3 +1,4 @@
+from __future__ import print_function
 import pandas as pd
 import numpy as np
 import csv
@@ -384,8 +385,8 @@ def sofa_preprocess(logdir, cfg):
         t_glb_base = float(f.readlines()[0])
         t_glb_net_base = t_glb_base
         t_glb_gpu_base = t_glb_base
-        print t_glb_base
-        print t_glb_net_base
+        print(t_glb_base)
+        print(t_glb_net_base)
 
     net_traces = []
     cpu_traces = []
@@ -828,7 +829,7 @@ def sofa_preprocess(logdir, cfg):
             print('t_api_offset = %lf' % t_api_offset)
             print('cfg.gpu_time_offset = %lf' % (cfg.gpu_time_offset * 1e-3))
             t_glb_gpu_base = t_api_offset + t_first_nv + cfg.gpu_time_offset * 1e-3
-        print t_glb_gpu_base
+        print(t_glb_gpu_base)
 
         print_progress("Read " + nvvp_filename + " by nvprof -- end")
         num_cudaproc = num_cudaproc + 1

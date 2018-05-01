@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 import csv
 import json
@@ -83,7 +84,7 @@ def sofa_record(command, logdir, cfg):
         os.system('pkill vmstat')
         os.system('pkill nvidia-smi')
     except BaseException:
-        print "Unexpected error:", sys.exc_info()[0]
+        print("Unexpected error:", sys.exc_info()[0])
         while os.system('pkill tcpdump')  != 0 or \
                 os.system('pkill mpstat') != 0 or \
                 os.system('pkill vmstat') != 0 or \
