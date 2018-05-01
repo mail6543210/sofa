@@ -156,10 +156,10 @@ def comm_profile(logdir, cfg, df_gpu):
         accum[src][dst] = float(accum[src][dst] + payload)
         accum_count[src][dst] = int(accum_count[src][dst] + 1)
 
-    for i in xrange(accum_time.shape[0]):
+    for i in range(accum_time.shape[0]):
         accum_time[0][i] = accum[0][i] / (1024.0 * 1024 * 1024) / bw_h2d
         accum_time[i][0] = accum[i][0] / (1024.0 * 1024 * 1024) / bw_d2h
-        for j in xrange(accum_time.shape[1]):
+        for j in range(accum_time.shape[1]):
             if i > 0 and j > 0:
                 accum_time[i][j] = accum[i][j] / \
                     (1024.0 * 1024 * 1024) / bw_p2p
@@ -394,9 +394,9 @@ def sofa_analyze(logdir, cfg):
                    num_gpus = num_gpus + 1 
             print_info('# of GPUs: ' + str(num_gpus) )
             edges = []
-            for i in xrange(num_gpus):
+            for i in range(num_gpus):
                 connections = lines[1+i].split()
-                for j in xrange(len(connections)):
+                for j in range(len(connections)):
                     if connections[j] == 'NV1' or connections[j] == 'NV2':
                         edges.append((i,j-1))
                         #print('%d connects to %d' % (i, j-1))

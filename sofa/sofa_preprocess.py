@@ -18,7 +18,7 @@ from .sofa_print import *
 
 def list_downsample(list_in, plot_ratio):
     new_list = []
-    for i in xrange(len(list_in)):
+    for i in range(len(list_in)):
         if i % plot_ratio == 0:
             # print("%d"%(i))
             new_list.append(list_in[i])
@@ -87,7 +87,7 @@ def net_trace_read(packet, t_offset):
     bandwidth = 125.0e6
     pkt_src = 0
     pkt_dst = 0
-    for i in xrange(4):
+    for i in range(4):
         pkt_src = pkt_src + \
             int(packet.split()[2].split('.')[i]) * np.power(1000, 3 - i)
         pkt_dst = pkt_dst + \
@@ -471,7 +471,7 @@ def sofa_preprocess(logdir, cfg):
             vm_wa_list.append(np.empty((len(sofa_fieldnames), 0)).tolist())
             vm_st_list.append(np.empty((len(sofa_fieldnames), 0)).tolist())
             t_base = t = 0
-            for i in xrange(len(lines)):
+            for i in range(len(lines)):
                 if lines[i].find('procs') == - \
                         1 and lines[i].find('swpd') == -1:
                     fields = lines[i].split()
@@ -683,7 +683,7 @@ def sofa_preprocess(logdir, cfg):
                 nvsmi_sm_list.append(np.empty((len(sofa_fieldnames), 0)).tolist())
                 nvsmi_mem_list.append(np.empty((len(sofa_fieldnames), 0)).tolist())
                 t_base = t = 0
-                for i in xrange(len(lines)):
+                for i in range(len(lines)):
                     if lines[i].find('gpu') == -1 \
                             and lines[i].find('Idx') == -1:
                         fields = lines[i].split()
@@ -741,7 +741,7 @@ def sofa_preprocess(logdir, cfg):
                 nvsmi_mem_traces = list_to_csv_and_traces(logdir, nvsmi_mem_list, 'nvsmi_trace.csv', 'a')
 
     t_first_nv = sys.float_info.max
-    for i in xrange(len(cpu_traces)):
+    for i in range(len(cpu_traces)):
         if re.search('_nv\d+rm', cpu_traces.iat[i,11]) is not None and float(cpu_traces.iat[i,0]) < t_first_nv:
             t_first_nv = float(cpu_traces.iat[i, 0])
 
