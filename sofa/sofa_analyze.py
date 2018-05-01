@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from __future__ import division
 from __future__ import print_function
 import os
 import sys
@@ -16,6 +17,7 @@ from .sofa_config import *
 import networkx as nx
 import re 
 
+from .tmp import old_div
 
 def payload_sum(df):
     print(len(df))
@@ -82,16 +84,16 @@ def comm_profile(logdir, cfg, df_gpu):
     for key, item in grouped_df:
         print(
             "[%s]: %lf" %
-            (cktable[key], grouped_df.get_group(key).sum() / 1000000.0))
+            (cktable[key], old_div(grouped_df.get_group(key).sum(), 1000000.0)))
         if int(key) == 1:
-            total_h2d_traffic = grouped_df.get_group(key).sum() / 1000000.0
+            total_h2d_traffic = old_div(grouped_df.get_group(key).sum(), 1000000.0)
         if int(key) == 2:
-            total_d2h_traffic = grouped_df.get_group(key).sum() / 1000000.0
+            total_d2h_traffic = old_div(grouped_df.get_group(key).sum(), 1000000.0)
         if int(key) == 10:
-            total_p2p_traffic = grouped_df.get_group(key).sum() / 1000000.0
+            total_p2p_traffic = old_div(grouped_df.get_group(key).sum(), 1000000.0)
         if int(key) != 8:
             total_traffic = total_traffic + \
-                grouped_df.get_group(key).sum() / 1000000.0
+                old_div(grouped_df.get_group(key).sum(), 1000000.0)
     print("Total traffic: %.2lf" % total_traffic)
 
     print_title("Data Communication Time for each CopyKind (s)")
@@ -104,7 +106,7 @@ def comm_profile(logdir, cfg, df_gpu):
             total_memcopy_time = total_memcopy_time + \
                 grouped_df.get_group(key).sum()
 
-    bw = (data_copyKind.sum() / 1000000) / durations_copyKind.sum() / 1000
+    bw = (old_div(data_copyKind.sum(), 1000000)) / durations_copyKind.sum() / 1000
     bw_h2d = bw_d2h = bw_p2p = avg_bw = 1e-10
 
     total_weights = 0
@@ -189,7 +191,7 @@ def comm_profile(logdir, cfg, df_gpu):
         else:
             row_str = "GPU%d\t" % i
         for j in range(accum.shape[1]):
-            row_str = row_str + "%d" % (accum[i][j] / (1024 * 1024)) + "\t"
+            row_str = row_str + "%d" % (old_div(accum[i][j], (1024 * 1024))) + "\t"
         print(row_str)
 
     print("Traffic Time Matrix (s):")
@@ -229,13 +231,13 @@ def gpu_profile(logdir, cfg, df_gpu):
         print("[%d]: %lf" % (int(float(key)), grouped_df.get_group(key).sum()))
         total_tasktime = total_tasktime + grouped_df.get_group(key).sum()
     n_devices = len(grouped_df)
-    per_gpu_time = total_tasktime / n_devices
+    per_gpu_time = old_div(total_tasktime, n_devices)
     print("Averaged GPU time of devices: %.2lf" % per_gpu_time)
 
     print_title("Data Traffic (bidirection) for each Device (MB)")
     grouped_df = df_gpu.groupby("deviceId")["payload"]
     for key, item in grouped_df:
-        print("[%d]: %lf" % (key, grouped_df.get_group(key).sum() / 1000000.0))
+        print("[%d]: %lf" % (key, old_div(grouped_df.get_group(key).sum(), 1000000.0)))
 
     grouped_df = df_gpu.groupby("copyKind")["duration"]
     for key, item in grouped_df:
@@ -281,7 +283,7 @@ def cpu_profile(logdir, cfg, df):
             print("[%d]: %lf" % (key, grouped_df.get_group(key).sum()))
         total_exec_time = total_exec_time + grouped_df.get_group(key).sum()
     n_devices = len(grouped_df)
-    avg_exec_time = total_exec_time / n_devices
+    avg_exec_time = old_div(total_exec_time, n_devices)
     print("total execution time = %.3lf" % total_exec_time)
     print("average execution time across devices = %.3lf" % avg_exec_time)
 
