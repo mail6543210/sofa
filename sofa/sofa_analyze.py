@@ -110,7 +110,7 @@ def comm_profile(logdir, cfg, df_gpu):
                 item.sum()
 
     bw = (data_copyKind.sum() / 1000 ** 2) / durations_copyKind.sum() / 1000
-    bw_h2d = bw_d2h = bw_p2p = avg_bw = 1e-10
+    avg_bw = 1e-10
 
     total_weights = 0
     for i in range(len(bw)):
@@ -121,17 +121,15 @@ def comm_profile(logdir, cfg, df_gpu):
             total_weights = total_h2d_traffic + total_weights
             avg_bw = avg_bw + bw.iloc[i] * \
                 float(total_h2d_traffic) / total_weights
-            bw_h2d = bw.iloc[i]
         if key == CK.D2H:
             total_weights = total_d2h_traffic + total_weights
             avg_bw = avg_bw + bw.iloc[i] * \
                 float(total_d2h_traffic) / total_weights
-            bw_d2h = bw.iloc[i]
         if key == CK.P2P:
             total_weights = total_p2p_traffic + total_weights
             avg_bw = avg_bw + bw.iloc[i] * \
                 float(total_p2p_traffic) / total_weights
-            bw_p2p = bw.iloc[i]
+    bw_h2d, bw_d2h, bw_p2p = bw.reindex([CK.H2D, CK.D2H, CK.P2P]).fillna(1e-10)
 
     print_title("Summary of Comm.")
     print("Averaged Achieved H2D Bandwidth: %.1f (GB/s)" % bw_h2d)
