@@ -110,16 +110,16 @@ def comm_profile(logdir, cfg, df_gpu):
         if key == CK.D2D:
             continue
         if key == CK.H2D:
-            total_weights = total_h2d_traffic + total_weights
-            avg_bw = avg_bw + bw.iloc[i] * \
+            total_weights += total_h2d_traffic
+            avg_bw += bw.iloc[i] * \
                 float(total_h2d_traffic) / total_weights
         if key == CK.D2H:
-            total_weights = total_d2h_traffic + total_weights
-            avg_bw = avg_bw + bw.iloc[i] * \
+            total_weights += total_d2h_traffic
+            avg_bw += bw.iloc[i] * \
                 float(total_d2h_traffic) / total_weights
         if key == CK.P2P:
-            total_weights = total_p2p_traffic + total_weights
-            avg_bw = avg_bw + bw.iloc[i] * \
+            total_weights += total_p2p_traffic
+            avg_bw += bw.iloc[i] * \
                 float(total_p2p_traffic) / total_weights
     bw_h2d, bw_d2h, bw_p2p = bw.reindex([CK.H2D, CK.D2H, CK.P2P]).fillna(1e-10)
 
