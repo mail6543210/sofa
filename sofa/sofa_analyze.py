@@ -1,3 +1,4 @@
+import enum
 import os
 import sys
 import pandas as pd
@@ -41,8 +42,14 @@ def partial_sum(df):
 
 
 # print_format_table()
-cktable = {-1: "NON", 0: "KER", 1: "H2D", 2: "D2H", 8: "D2D", 10: "P2P"}
-ckindex = [1, 2, 8, 10]
+@enum.unique
+class CK(enum.IntEnum):
+    NON = -1
+    KER = 0
+    H2D = 1
+    D2H = 2
+    D2D = 8
+    P2P = 10
 
 
 def comm_profile(logdir, cfg, df_gpu):
@@ -80,14 +87,14 @@ def comm_profile(logdir, cfg, df_gpu):
     for key, item in grouped_df:
         print(
             "[%s]: %lf" %
-            (cktable[key], grouped_df.get_group(key).sum() / 1000000.0))
-        if int(key) == 1:
+            (CK(key).name, grouped_df.get_group(key).sum() / 1000000.0))
+        if key == CK.H2D:
             total_h2d_traffic = grouped_df.get_group(key).sum() / 1000000.0
-        if int(key) == 2:
+        if key == CK.D2H:
             total_d2h_traffic = grouped_df.get_group(key).sum() / 1000000.0
-        if int(key) == 10:
+        if key == CK.P2P:
             total_p2p_traffic = grouped_df.get_group(key).sum() / 1000000.0
-        if int(key) != 8:
+        if key != CK.D2D:
             total_traffic = total_traffic + \
                 grouped_df.get_group(key).sum() / 1000000.0
     print("Total traffic: %.2lf" % total_traffic)
@@ -95,8 +102,8 @@ def comm_profile(logdir, cfg, df_gpu):
     print_title("Data Communication Time for each CopyKind (s)")
     durations_copyKind = grouped_df = df_gpu.groupby("copyKind")["duration"]
     for key, item in grouped_df:
-        print("[%s]: %lf" % (cktable[key], grouped_df.get_group(key).sum()))
-        if key == 0:
+        print("[%s]: %lf" % (CK(key).name, grouped_df.get_group(key).sum()))
+        if key == CK.KER:
             total_kernel_time = grouped_df.get_group(key).sum()
         else:
             total_memcopy_time = total_memcopy_time + \
@@ -108,19 +115,19 @@ def comm_profile(logdir, cfg, df_gpu):
     total_weights = 0
     for i in range(len(bw)):
         key = list(bw.keys())[i]
-        if cktable[key] == 'D2D':
+        if key == CK.D2D:
             continue
-        if cktable[key] == 'H2D':
+        if key == CK.H2D:
             total_weights = total_h2d_traffic + total_weights
             avg_bw = avg_bw + bw.iloc[i] * \
                 float(total_h2d_traffic) / total_weights
             bw_h2d = bw.iloc[i]
-        if cktable[key] == 'D2H':
+        if key == CK.D2H:
             total_weights = total_d2h_traffic + total_weights
             avg_bw = avg_bw + bw.iloc[i] * \
                 float(total_d2h_traffic) / total_weights
             bw_d2h = bw.iloc[i]
-        if cktable[key] == 'P2P':
+        if key == CK.P2P:
             total_weights = total_p2p_traffic + total_weights
             avg_bw = avg_bw + bw.iloc[i] * \
                 float(total_p2p_traffic) / total_weights
@@ -146,7 +153,7 @@ def comm_profile(logdir, cfg, df_gpu):
     #res_accum = pool.map( partial(payload_sum), df_gpu)
 
     for i in range(len(df_gpu)):
-        if df_gpu.iat[i, 4] == 0 or df_gpu.iat[i, 4] == 8:
+        if df_gpu.iat[i, 4] == CK.KER or df_gpu.iat[i, 4] == CK.D2D:
             continue
         src = df_gpu.iat[i, 7]
         dst = df_gpu.iat[i, 8]
