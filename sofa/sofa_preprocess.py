@@ -15,7 +15,6 @@ import subprocess
 import re
 from .sofa_config import *
 from .sofa_print import *
-from .tmp import old_div
 
 
 def list_downsample(list_in, plot_ratio):

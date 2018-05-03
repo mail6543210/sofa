@@ -17,7 +17,6 @@ from .sofa_config import *
 import networkx as nx
 import re 
 
-from .tmp import old_div
 
 def payload_sum(df):
     print(len(df))
