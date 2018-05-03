@@ -102,12 +102,12 @@ def comm_profile(logdir, cfg, df_gpu):
     print_title("Data Communication Time for each CopyKind (s)")
     durations_copyKind = grouped_df = df_gpu.groupby("copyKind")["duration"]
     for key, item in grouped_df:
-        print("[%s]: %lf" % (CK(key).name, grouped_df.get_group(key).sum()))
+        print("[%s]: %lf" % (CK(key).name, item.sum()))
         if key == CK.KER:
-            total_kernel_time = grouped_df.get_group(key).sum()
+            total_kernel_time = item.sum()
         else:
             total_memcopy_time = total_memcopy_time + \
-                grouped_df.get_group(key).sum()
+                item.sum()
 
     bw = (data_copyKind.sum() / 1000 ** 2) / durations_copyKind.sum() / 1000
     bw_h2d = bw_d2h = bw_p2p = avg_bw = 1e-10
