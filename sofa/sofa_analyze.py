@@ -102,7 +102,7 @@ def comm_profile(logdir, cfg, df_gpu):
             total_memcopy_time = total_memcopy_time + \
                 grouped_df.get_group(key).sum()
 
-    bw = (data_copyKind.sum() / 1000000) / durations_copyKind.sum() / 1000
+    bw = (data_copyKind.sum() / 1000 ** 2) / durations_copyKind.sum() / 1000
     bw_h2d = bw_d2h = bw_p2p = avg_bw = 1e-10
 
     total_weights = 0
