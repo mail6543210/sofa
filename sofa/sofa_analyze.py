@@ -84,19 +84,11 @@ def comm_profile(logdir, cfg, df_gpu):
 
     print_title("Data Traffic for each CopyKind (MB)")
     data_copyKind = grouped_df = df_gpu.groupby("copyKind")["payload"]
-    for key, item in grouped_df:
-        print(
-            "[%s]: %lf" %
-            (CK(key).name, grouped_df.get_group(key).sum() / 1000000.0))
-        if key == CK.H2D:
-            total_h2d_traffic = grouped_df.get_group(key).sum() / 1000000.0
-        if key == CK.D2H:
-            total_d2h_traffic = grouped_df.get_group(key).sum() / 1000000.0
-        if key == CK.P2P:
-            total_p2p_traffic = grouped_df.get_group(key).sum() / 1000000.0
-        if key != CK.D2D:
-            total_traffic = total_traffic + \
-                grouped_df.get_group(key).sum() / 1000000.0
+    TF = grouped_df.sum() / 1000 ** 2
+    for key, item in TF.items():
+        print("[%s]: %lf" % (CK(key).name, item))
+    total_h2d_traffic, total_d2h_traffic, total_p2p_traffic = TF.reindex([CK.H2D, CK.D2H, CK.P2P]).fillna(0)
+    total_traffic = TF[TF.index != CK.D2D].sum()
     print("Total traffic: %.2lf" % total_traffic)
 
     print_title("Data Communication Time for each CopyKind (s)")
