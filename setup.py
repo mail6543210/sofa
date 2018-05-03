@@ -1,9 +1,16 @@
 #!/usr/bin/env python
+import sys
+
 from setuptools import setup, find_packages
 
 # var = {}
 # with open('sofa/__version__.py') as fp:
 #     exec(fp.read(), var)
+
+# This test is redundant given setuptools>=24.2.0 and pip>=9.0.0.
+if sys.version_info < (3, 4):
+    raise Exception('This project only supports Python 3.4+.')
+
 
 setup(
         name='sofa',
@@ -23,12 +30,11 @@ setup(
             'License :: OSI Approved :: Apache Software License',
 
             'Programming Language :: Python',
-            'Programming Language :: Python :: 2',
-            'Programming Language :: Python :: 2.7',
             'Programming Language :: Python :: 3',
             'Programming Language :: Python :: 3.4',
             'Programming Language :: Python :: 3.5',
             'Programming Language :: Python :: 3.6',
+            'Programming Language :: Python :: 3 :: Only',
         ],
         # keywords='space-separated strings',
         install_requires=[
@@ -36,7 +42,7 @@ setup(
             'networkx',
             'pandas',
         ],
-        python_requires='>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*',
+        python_requires='>=3.4',
         # tests_require=[
         # ],
         package_data={
