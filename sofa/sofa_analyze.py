@@ -132,32 +132,21 @@ def comm_profile(logdir, cfg, df_gpu):
     print("MeasuredTotalD2HTraffic : %lf (MB)" % total_d2h_traffic)
     print("MeasuredTotalP2PTraffic : %lf (MB)" % total_p2p_traffic)
 
-    accum = np.zeros((1 + n_gpus, 1 + n_gpus))
-    accum_count = np.zeros((1 + n_gpus, 1 + n_gpus))
-    accum_time = np.zeros((1 + n_gpus, 1 + n_gpus))
-
     # TODO: Parallelize payload accumulatoin
     #print("df length: %d" % len(df_gpu))
     #cpu_count = mp.cpu_count()
     #pool = mp.Pool(processes=cpu_count)
     #res_accum = pool.map( partial(payload_sum), df_gpu)
 
-    for i in range(len(df_gpu)):
-        if df_gpu.iat[i, 4] == CK.KER or df_gpu.iat[i, 4] == CK.D2D:
-            continue
-        src = df_gpu.iat[i, 7]
-        dst = df_gpu.iat[i, 8]
-        payload = df_gpu.iat[i, 5]
-        accum[src][dst] = float(accum[src][dst] + payload)
-        accum_count[src][dst] = int(accum_count[src][dst] + 1)
+    payload = df_gpu[~df_gpu.copyKind.isin([CK.KER, CK.D2D])].groupby(['pkt_src', 'pkt_dst'])['payload']
+    new_idx = pd.MultiIndex.from_product([range(n_gpus + 1), range(n_gpus + 1)])
+    accum = payload.sum().reindex(new_idx).fillna(0).values.reshape(n_gpus + 1, n_gpus + 1)
+    accum_count = payload.count().reindex(new_idx).fillna(0).values.reshape(n_gpus + 1, n_gpus + 1)
 
-    for i in range(accum_time.shape[0]):
-        accum_time[0][i] = accum[0][i] / (1024.0 * 1024 * 1024) / bw_h2d
-        accum_time[i][0] = accum[i][0] / (1024.0 * 1024 * 1024) / bw_d2h
-        for j in range(accum_time.shape[1]):
-            if i > 0 and j > 0:
-                accum_time[i][j] = accum[i][j] / \
-                    (1024.0 * 1024 * 1024) / bw_p2p
+    accum_time = np.empty((1 + n_gpus, 1 + n_gpus))
+    accum_time[0, :] = accum[0, :] / (1024.0 * 1024 * 1024) / bw_h2d
+    accum_time[:, 0] = accum[:, 0] / (1024.0 * 1024 * 1024) / bw_d2h
+    accum_time[1:, 1:] = accum[1:, 1:] / (1024.0 * 1024 * 1024) / bw_p2p
 
     print("Traffic Matrix (log10(B)):")
     row_str = "\tHOST\t"
