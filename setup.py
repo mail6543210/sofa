@@ -53,5 +53,10 @@ setup(
                 'sofa = sofa.cli:main',
             ]
         },
+        extras_require={
+            'dev': [
+                'flake8',
+            ]
+        }
         # setup_requires=['pytest-runner'],
 )
