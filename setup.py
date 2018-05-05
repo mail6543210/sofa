@@ -56,6 +56,7 @@ setup(
         extras_require={
             'dev': [
                 'flake8',
+                'flake8-import-order',
             ]
         }
         # setup_requires=['pytest-runner'],
