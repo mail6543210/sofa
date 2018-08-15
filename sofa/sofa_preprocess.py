@@ -46,6 +46,7 @@ def cpu_trace_read(sample, t_offset):
     fields = sample.split()
 
     if re.match('\[\d+\]', fields[1]) is not None:
+        print('!herh')
         time = float(fields[2].split(':')[0])
         func_name = fields[4].replace('-', '_') + fields[6]
         cycles = float(fields[3])
@@ -748,7 +749,7 @@ def sofa_preprocess(logdir, cfg):
         t_first_nv = t_glb_base
     print("t_first_nv: %lf" % (t_first_nv))
     # Apply filters for cpu traces
-    
+
     filtered_groups = []
     color_of_filtered_group = []
     if len(cpu_traces) > 0:

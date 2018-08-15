@@ -8,8 +8,6 @@ from setuptools import setup, find_packages
 #     exec(fp.read(), var)
 
 # This test is redundant given setuptools>=24.2.0 and pip>=9.0.0.
-if sys.version_info < (3, 4):
-    raise Exception('This project only supports Python 3.4+.')
 
 
 setup(
@@ -42,7 +40,7 @@ setup(
             'networkx',
             'pandas',
         ],
-        python_requires='>=3.4',
+        python_requires='>=3.6',
         # tests_require=[
         # ],
         package_data={
