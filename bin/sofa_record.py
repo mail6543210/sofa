@@ -345,7 +345,7 @@ def sofa_record(command, cfg):
         
 
         if cfg.enable_strace:
-            command_prefix = ' '.join(['strace', '-q', '-T', '-t', '-tt', '-f', '-o', '%s/strace.txt'%logdir]) + ' '
+            command_prefix = ' '.join(['strace', '-qTtttfs0', '-e', '!futex', '-o', '%s/strace.txt'%logdir]) + ' '
 
         if int(os.system('command -v perf 1> /dev/null')) == 0:
             ret = str(subprocess.check_output(['perf stat -e cycles ls 2>&1 '], shell=True))
