@@ -21,5 +21,5 @@ def sofa_viz(cfg):
     print_hint('Please open your browser to start profiling.')
     print_hint('After profiling, please enter Ctrl+C to exit.')
     os.system(
-        'cd %s && python3.6 -m http.server %d 2>&1 1> /dev/null; cd -' %
-        (cfg.logdir,cfg.viz_port))
+        'cd %s && %s -m http.server %d 2>&1 1> /dev/null; cd -' %
+        (cfg.logdir,sys.executable,cfg.viz_port))
